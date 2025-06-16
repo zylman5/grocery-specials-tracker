@@ -19,16 +19,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: grocery-specials-tracker
 
       - name: Run scraper
         run: node scripts/scrape-specials.js
+        working-directory: grocery-specials-tracker
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add public/specials.json
+          git add grocery-specials-tracker/public/specials.json
           git commit -m "Update specials.json [auto]" || echo "No changes to commit"
           git push
-
-          Add GitHub Actions workflow for daily specials scraper
