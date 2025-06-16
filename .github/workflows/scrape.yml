@@ -1,0 +1,34 @@
+name: Daily Specials Scraper
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # Runs daily at 9am AEST (23:00 UTC)
+  workflow_dispatch:
+
+jobs:
+  scrape-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run scraper
+        run: node scripts/scrape-specials.js
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add public/specials.json
+          git commit -m "Update specials.json [auto]" || echo "No changes to commit"
+          git push
+
+          Add GitHub Actions workflow for daily specials scraper
