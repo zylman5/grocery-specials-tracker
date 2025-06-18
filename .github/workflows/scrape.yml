@@ -1,13 +1,10 @@
-name: Daily Specials Scraper
-
-on:
-  schedule:
-    - cron: '0 23 * * *'  # Runs daily at 9am AEST (23:00 UTC)
-  workflow_dispatch:
-
 jobs:
   scrape-and-commit:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: grocery-specials-tracker
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -19,16 +16,14 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: grocery-specials-tracker
 
       - name: Run scraper
         run: node scripts/scrape-specials.js
-        working-directory: grocery-specials-tracker
 
       - name: Commit and push changes
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add grocery-specials-tracker/public/specials.json
+          git add public/specials.json
           git commit -m "Update specials.json [auto]" || echo "No changes to commit"
           git push
