@@ -1,3 +1,10 @@
+name: Daily Specials Scraper
+
+on:
+  schedule:
+    - cron: '0 23 * * *'  # Runs daily at 9am AEST (23:00 UTC)
+  workflow_dispatch:
+
 jobs:
   scrape-and-commit:
     runs-on: ubuntu-latest
